@@ -12,3 +12,5 @@ struct Vector3D {
     Vector3D operator-(const Vector3D &a) const;
     Vector3D operator*(double a) const;
 };
+
+inline std::istream &operator>>(std::istream &is, Vector3D &v) { return is >> v.X >> v.Y >> v.Z; }

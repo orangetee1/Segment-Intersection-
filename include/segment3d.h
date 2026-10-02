@@ -3,8 +3,8 @@
 #include "vector3d.h"
 
 struct Segment3D {
-    Segment3D(const Vector3D &a, const Vector3D &b) : start(a), end(b) {}
+    Segment3D(const Vector3D &a, const Vector3D &b) : Start(a), End(b) {}
 
-    Vector3D start;
-    Vector3D end;
+    Vector3D Start;
+    Vector3D End;
 };

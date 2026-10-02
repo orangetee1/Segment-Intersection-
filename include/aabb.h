@@ -11,5 +11,5 @@ struct AABB {
 
     AABB(const Vector3D &p1, const Vector3D &p2, double eps = 1e-9);
 
-    bool intersects(const AABB &other) const;
+    bool Intersects(const AABB &other) const;
 };

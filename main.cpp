@@ -4,8 +4,6 @@
 
 constexpr double EPS = 1e-7;
 
-inline std::istream &operator>>(std::istream &is, Vector3D &v) { return is >> v.X >> v.Y >> v.Z; }
-
 int main() {
     Vector3D a, b;
     std::cout << "Введите координаты 1-го отрезка (start X Y Z, end X Y Z):\n";
@@ -29,9 +27,9 @@ int main() {
     if (auto *vec = std::get_if<Vector3D>(&result)) {
         std::cout << "Точка пересечения: " << vec->X << " " << vec->Y << " " << vec->Z << '\n';
     } else if (auto *seg = std::get_if<Segment3D>(&result)) {
-        std::cout << "Отрезок пересечения: (" << seg->start.X << ", " << seg->start.Y << ", "
-                  << seg->start.Z << ") - (" << seg->end.X << ", " << seg->end.Y << ", "
-                  << seg->end.Z << ")\n";
+        std::cout << "Отрезок пересечения: (" << seg->Start.X << ", " << seg->Start.Y << ", "
+                  << seg->Start.Z << ") - (" << seg->End.X << ", " << seg->End.Y << ", "
+                  << seg->End.Z << ")\n";
     } else {
         std::cout << "Нет пересечения\n";
     }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <optional>
 #include <variant>
 
 #include "segment3d.h"

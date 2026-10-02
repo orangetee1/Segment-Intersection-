@@ -11,32 +11,32 @@ inline double SquaredDistance(const Vector3D &a, const Vector3D &b) {
 }
 
 inline bool IsDegenerate(const Segment3D &s, const double tol) {
-    return SquaredDistance(s.start, s.end) <= tol * tol;
+    return SquaredDistance(s.Start, s.End) <= tol * tol;
 }
 
 inline std::pair<Vector3D, double> ClosestPointOnSegment(const Segment3D &seg, const Vector3D &p) {
-    Vector3D v = seg.end - seg.start;
+    Vector3D v = seg.End - seg.Start;
     double v_len2 = Dot(v, v);
     if (v_len2 == 0.0) {
-        return {seg.start, SquaredDistance(p, seg.start)};
+        return {seg.Start, SquaredDistance(p, seg.Start)};
     }
-    double t = std::clamp(Dot(p - seg.start, v) / v_len2, 0.0, 1.0);
-    Vector3D projection = seg.start + v * t;
+    double t = std::clamp(Dot(p - seg.Start, v) / v_len2, 0.0, 1.0);
+    Vector3D projection = seg.Start + v * t;
     return {projection, SquaredDistance(p, projection)};
 }
 
 IntersectionResult IntersectCollinear(const Segment3D &x, const Segment3D &y, const double tol) {
-    Vector3D v = y.end - y.start;
+    Vector3D v = y.End - y.Start;
     double v_len2 = Dot(v, v);
 
-    Vector3D w = x.start - y.start;
+    Vector3D w = x.Start - y.Start;
     Vector3D cross_wv = Cross(w, v);
     if (Dot(cross_wv, cross_wv) > tol * tol * v_len2) {
         return std::monostate{};
     }
 
-    double tA = Dot(x.start - y.start, v) / v_len2;
-    double tB = Dot(x.end - y.start, v) / v_len2;
+    double tA = Dot(x.Start - y.Start, v) / v_len2;
+    double tB = Dot(x.End - y.Start, v) / v_len2;
 
     double t_min = std::min(tA, tB);
     double t_max = std::max(tA, tB);
@@ -49,17 +49,17 @@ IntersectionResult IntersectCollinear(const Segment3D &x, const Segment3D &y, co
     }
 
     if (std::abs(t_end - t_start) <= tol) {
-        return y.start + v * t_start;
+        return y.Start + v * t_start;
     }
 
-    return Segment3D(y.start + v * t_start, y.start + v * t_end);
+    return Segment3D(y.Start + v * t_start, y.Start + v * t_end);
 }
 
 IntersectionResult Intersect(const Segment3D &x, const Segment3D &y, const double tol) {
-    const AABB x_box{x.start, x.end, tol};
-    const AABB y_box{y.start, y.end, tol};
+    const AABB x_box{x.Start, x.End, tol};
+    const AABB y_box{y.Start, y.End, tol};
 
-    if (!x_box.intersects(y_box)) {
+    if (!x_box.Intersects(y_box)) {
         return std::monostate{};
     }
 
@@ -67,29 +67,29 @@ IntersectionResult Intersect(const Segment3D &x, const Segment3D &y, const doubl
     const bool y_degen = IsDegenerate(y, tol);
 
     if (x_degen && y_degen) {
-        if (SquaredDistance(x.start, y.start) <= tol * tol) {
-            return (x.start + y.start) * 0.5;
+        if (SquaredDistance(x.Start, y.Start) <= tol * tol) {
+            return (x.Start + y.Start) * 0.5;
         }
         return std::monostate{};
     }
 
     if (x_degen) {
-        auto [proj, d] = ClosestPointOnSegment(y, x.start);
+        auto [proj, d] = ClosestPointOnSegment(y, x.Start);
         if (d <= tol * tol)
-            return (x.start + proj) * 0.5;
+            return (x.Start + proj) * 0.5;
         return std::monostate{};
     }
 
     if (y_degen) {
-        auto [proj, d] = ClosestPointOnSegment(x, y.start);
+        auto [proj, d] = ClosestPointOnSegment(x, y.Start);
         if (d <= tol * tol)
-            return (y.start + proj) * 0.5;
+            return (y.Start + proj) * 0.5;
         return std::monostate{};
     }
 
-    Vector3D u = x.end - x.start;
-    Vector3D v = y.end - y.start;
-    Vector3D w = x.start - y.start;
+    Vector3D u = x.End - x.Start;
+    Vector3D v = y.End - y.Start;
+    Vector3D w = x.Start - y.Start;
 
     auto n = Cross(u, v);
     auto n2 = Dot(n, n);
@@ -125,8 +125,8 @@ IntersectionResult Intersect(const Segment3D &x, const Segment3D &y, const doubl
     s = std::clamp(s, 0.0, 1.0);
     t = std::clamp(t, 0.0, 1.0);
 
-    Vector3D pX = x.start + u * s;
-    Vector3D pY = y.start + v * t;
+    Vector3D pX = x.Start + u * s;
+    Vector3D pY = y.Start + v * t;
 
     if (SquaredDistance(pX, pY) <= tol * tol) {
         return (pX + pY) * 0.5;
