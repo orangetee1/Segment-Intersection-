@@ -1,10 +1,11 @@
 #pragma once
 
 #include <optional>
+#include <variant>
 
 #include "segment3d.h"
 
-constexpr double EPS = 1e-7;
+using IntersectionResult = std::variant<std::monostate, Vector3D, Segment3D>;
 
 inline double Dot(const Vector3D &a, const Vector3D &b) {
     return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
@@ -19,4 +20,4 @@ inline double ScalarTripleProduct(const Vector3D &a, const Vector3D &b, const Ve
            a.Z * (b.X * c.Y - b.Y * c.X);
 }
 
-std::optional<Vector3D> Intersect(const Segment3D &a, const Segment3D &b);
+IntersectionResult Intersect(const Segment3D &a, const Segment3D &b, const double tol = 1e-7);
