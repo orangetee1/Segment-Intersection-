@@ -15,7 +15,6 @@ add_executable(geometry_tests
 target_link_libraries(geometry_tests
     PRIVATE
         geometry
-        project_warnings
         GTest::gtest_main
 )
 
